@@ -8,9 +8,50 @@
           integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
 </head>
 <body>
-@extends('layouts.main')
+@extends(Auth::check() ? (Auth::user()->usertype == \App\Models\User::ROLE_ADMIN ? 'layouts.admin' : 'layouts.main' ) : 'layouts.main')
 @section('content')
-    <h1 class="fw-bold">Products</h1>
+    @if(Auth::check())
+        @if(Auth::user()->usertype == \App\Models\User::ROLE_ADMIN)
+            <a href="/product/create" class="btn btn-primary mb-2">Add new product</a>
+            <div class="table-responsive">
+                <table class="table align-middle mb-0 bg-white">
+                    <thead class="bg-light">
+                    <tr>
+                        <th>Image</th>
+                        <th>Name</th>
+                        <th>Price</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach($data as $product)
+                        <tr>
+                            <td><img
+                                    style="width: 45px; height: 45px"
+                                    class="rounded-circle" src="/images/{{ $product->image }}"></td>
+                            <td>
+                                <p class="fw-bold mb-1">{{ $product->title }}</p>
+                            </td>
+                            <td>{{ $product->price }}</td>
+                            <td>
+                                <a href="/product/edit/{{ $product->id }}" class="btn btn-primary btn-block">
+                                    Edit
+                                </a>
+                                <a href="/product/delete{{ $product->id }}" class="btn btn-danger btn-block">Delete</a>
+                            </td>
+                        </tr>
+                    @endforeach
+                    </tbody>
+                </table>
+            </div>
+            <nav class="mt-4">
+                <ul class="pagination">
+                    {{ $data->links() }}
+                </ul>
+            </nav>
+        @endif
+    @elseif(Auth::check() || !Auth::check())
+        <h1 class="fw-bold">Products</h1>
         <section style="background-color: #eee;">
             <div class="container py-5">
                 <div class="row">
@@ -26,7 +67,7 @@
                                         <h5 class="mb-0">{{ $product->title }}</h5>
                                     </div>
                                     <a href="/product/{{ $product->id }}">
-                                    <img class="card-img-top" src="/images/{{ $product->image }}">
+                                        <img class="card-img-top" src="/images/{{ $product->image }}">
                                     </a>
                                 </div>
                             </div>
@@ -34,10 +75,8 @@
                     @endforeach
                 </div>
             </div>
-    </section>
-{{--    @else--}}
-{{--        <p class="fs-1 fw-normal">No products available</p>--}}
-{{--    @endif--}}
+        </section>
+    @endif
 @endsection
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"

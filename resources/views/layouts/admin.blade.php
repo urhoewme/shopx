@@ -10,7 +10,7 @@
 <body>
 <nav class="navbar navbar-expand-lg bg-light d-flex">
     <div class="container-fluid flex-grow-1">
-        <a class="navbar-brand" href="#">Shopx</a>
+        <a class="navbar-brand" href="#">Admin Panel</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
                 aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -20,7 +20,7 @@
                 <a class="nav-link" aria-current="page" href="/">Home</a>
                 <a class="nav-link" href="/products">Products</a>
                 @if(Auth::check())
-                <a class="nav-link" href="/dashboard">Dashboard</a>
+                    <a class="nav-link" href="/dashboard">Dashboard</a>
                 @endif
                 @if(Auth::check())
                     <div class="navbar-nav">

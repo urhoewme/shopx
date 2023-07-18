@@ -13,7 +13,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $data = Products::all();
+        $data = Products::paginate(9);
         return view('products.products', compact('data'));
     }
 
@@ -61,7 +61,8 @@ class ProductController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $data = Products::query()->findOrFail($id);
+        return view('products.edit', compact('data'));
     }
 
     /**
@@ -69,7 +70,19 @@ class ProductController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $data = Products::query()->findOrFail($id);
+        $image = $request->file;
+        if($image)
+        {
+            $fileName = time() . '.' . $request->image->extension();
+            $request->image->move(public_path('images'), $fileName);
+            $data->image = $fileName;
+        }
+        $data->title = $request->title;
+        $data->description = $request->description;
+        $data->price = $request->price;
+        $data->save();
+        return view('products.products');
     }
 
     /**

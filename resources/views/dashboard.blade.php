@@ -8,13 +8,51 @@
           integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
 </head>
 <body>
-@extends('layouts.main')
+@extends(Auth::user()->usertype == \App\Models\User::ROLE_ADMIN ? 'layouts.admin' : 'layouts.main')
 @section('content')
     <h1>Dashboard</h1>
     @auth
         <h2>Welcome, {{ auth()->user()->name }} !</h2>
     @endauth
-    @endsection
+    @if(Auth::user()->usertype == \App\Models\User::ROLE_ADMIN)
+        <div class="table-responsive">
+        <table class="table align-middle mb-0 bg-white">
+            <thead class="bg-light">
+            <tr>
+                <th>Name</th>
+                <th>Usertype</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach($data as $user)
+                <tr>
+                    <td>
+                        <div class="d-flex align-items-center">
+                            <div class="ms-3">
+                                <p class="fw-bold mb-1">{{ $user->name }}</p>
+                                <p class="text-muted mb-0">{{ $user->email }}</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td>{{ $user->usertype }}</td>
+                    <td>
+                        <button type="button" class="btn btn-primary btn-rounded">
+                            Edit
+                        </button>
+                    </td>
+                </tr>
+            @endforeach
+            </tbody>
+        </table>
+        </div>
+        <nav class="mt-4">
+            <ul class="pagination">
+                {{ $data->links() }}
+            </ul>
+        </nav>
+    @endif
+@endsection
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
         crossorigin="anonymous"></script>
