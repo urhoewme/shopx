@@ -1,8 +1,12 @@
 <?php
 
+use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\LoginController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
+use App\Http\Middleware\Authenticate;
+use App\Http\Middleware\AdminAuth;
 
 /*
 |-------------------------------------------------------------------
@@ -16,9 +20,16 @@ use App\Http\Controllers\ProductController;
 */
 
 Route::get('/', [HomeController::class, 'index']);
+Route::get('/dashboard', [HomeController::class, 'dashboard'])->middleware(Authenticate::class);
 
 Route::get('/products', [ProductController::class, 'index']);
-Route::get('/product/create', [ProductController::class, 'create']);
-Route::post('/product/create', [ProductController::class, 'store']);
-
+Route::get('/product/create', [ProductController::class, 'create'])->middleware(AdminAuth::class);
+Route::post('/product/create', [ProductController::class, 'store'])->middleware(AdminAuth::class);
 Route::get('/product/{id}', [ProductController::class, 'show']);
+
+Route::get('/register', [RegisterController::class, 'index']);
+Route::post('/register', [RegisterController::class, 'store']);
+
+Route::get('/login', [LoginController::class, 'index'])->name('login');
+Route::post('/login', [LoginController::class, 'login']);
+Route::get('/logout', [LoginController::class, 'logout'])->middleware(Authenticate::class);
