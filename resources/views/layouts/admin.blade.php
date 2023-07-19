@@ -19,20 +19,11 @@
             <div class="navbar-nav">
                 <a class="nav-link" aria-current="page" href="/">Home</a>
                 <a class="nav-link" href="/products">Products</a>
-                @if(Auth::check())
-                    <a class="nav-link" href="/dashboard">Dashboard</a>
-                @endif
-                @if(Auth::check())
-                    <div class="navbar-nav">
-                        <a class="nav-link" href="/logout">Log Out</a>
-                    </div>
-                @endif
-                @if(Auth::guest())
-                    <div class="navbar-nav">
-                        <a class="nav-link" href="/register">Sign Up</a>
-                        <a class="nav-link" href="/login">Sign In</a>
-                    </div>
-                @endif
+                <a class="nav-link" href="/dashboard">Dashboard</a>
+                <a href="/services" class="nav-link">Services</a>
+                <div class="navbar-nav">
+                    <a class="nav-link" href="/logout">Log Out</a>
+                </div>
             </div>
         </div>
     </div>

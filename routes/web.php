@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\LoginController;
 use Illuminate\Support\Facades\Route;
@@ -38,3 +39,7 @@ Route::post('/register', [RegisterController::class, 'store']);
 Route::get('/login', [LoginController::class, 'index'])->name('login');
 Route::post('/login', [LoginController::class, 'login']);
 Route::get('/logout', [LoginController::class, 'logout'])->middleware(Authenticate::class);
+
+Route::get('/services', [ServiceController::class, 'index'])->middleware(AdminAuth::class);
+Route::get('/service/create', [ServiceController::class, 'create'])->middleware(AdminAuth::class);
+Route::post('/service/create', [ServiceController::class, 'store'])->middleware(AdminAuth::class);
