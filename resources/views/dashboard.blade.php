@@ -37,9 +37,9 @@
                     </td>
                     <td>{{ $user->usertype }}</td>
                     <td>
-                        <button type="button" class="btn btn-primary btn-rounded">
+                        <a href="/user/edit/{{ $user->id }}" class="btn btn-primary btn-rounded">
                             Edit
-                        </button>
+                        </a>
                     </td>
                 </tr>
             @endforeach

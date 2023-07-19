@@ -21,13 +21,16 @@ use App\Http\Middleware\AdminAuth;
 
 Route::get('/', [HomeController::class, 'index']);
 Route::get('/dashboard', [HomeController::class, 'dashboard'])->middleware(Authenticate::class);
+Route::get('/user/edit/{id}', [HomeController::class, 'edit'])->middleware(AdminAuth::class);
+Route::post('/user/edit/{id}', [HomeController::class, 'update'])->middleware(AdminAuth::class);
 
 Route::get('/products', [ProductController::class, 'index']);
 Route::get('/product/create', [ProductController::class, 'create'])->middleware(AdminAuth::class);
 Route::post('/product/create', [ProductController::class, 'store'])->middleware(AdminAuth::class);
 Route::get('/product/{id}', [ProductController::class, 'show']);
-Route::get('/product/edit/{id}', [ProductController::class, 'edit']);
-Route::post('/product/edit/{id}', [ProductController::class, 'update']);
+Route::get('/product/edit/{id}', [ProductController::class, 'edit'])->middleware(AdminAuth::class);
+Route::post('/product/edit/{id}', [ProductController::class, 'update'])->middleware(AdminAuth::class);
+Route::post('/product/delete/{id}', [ProductController::class, 'destroy'])->middleware(AdminAuth::class);
 
 Route::get('/register', [RegisterController::class, 'index']);
 Route::post('/register', [RegisterController::class, 'store']);

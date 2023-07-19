@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Products;
+use App\Models\Product;
+use App\Models\Service;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
@@ -13,7 +14,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $data = Products::paginate(9);
+        $data = Product::paginate(9);
         return view('products.products', compact('data'));
     }
 
@@ -38,7 +39,7 @@ class ProductController extends Controller
         ]);
         $fileName = time() . '.' . $request->image->extension();
         $request->image->move(public_path('images'), $fileName);
-        $product = new Products();
+        $product = new Product();
         $product->title = $request->title;
         $product->description = $request->description;
         $product->price = $request->price;
@@ -52,7 +53,7 @@ class ProductController extends Controller
      */
     public function show(string $id)
     {
-        $data = Products::query()->findOrFail($id);
+        $data = Product::query()->findOrFail($id);
         return view('products.product', compact('data'));
     }
 
@@ -61,7 +62,7 @@ class ProductController extends Controller
      */
     public function edit(string $id)
     {
-        $data = Products::query()->findOrFail($id);
+        $data = Product::query()->findOrFail($id);
         return view('products.edit', compact('data'));
     }
 
@@ -70,19 +71,23 @@ class ProductController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $data = Products::query()->findOrFail($id);
-        $image = $request->file;
-        if($image)
-        {
-            $fileName = time() . '.' . $request->image->extension();
-            $request->image->move(public_path('images'), $fileName);
-            $data->image = $fileName;
+        $data = Product::query()->findOrFail($id);
+        if($request->image != ''){
+            $path = public_path('images');
+            if($data->image != ''  && $data->image != null){
+                $file_old = $path.'/'.$data->image;
+                unlink($file_old);
+            }
+            $file = $request->image;
+            $filename = time() . '.' . $request->image->extension();
+            $file->move($path, $filename);
+            $data->update(['image' => $filename]);
         }
         $data->title = $request->title;
         $data->description = $request->description;
         $data->price = $request->price;
         $data->save();
-        return view('products.products');
+        return redirect('/products')->with('status', 'Success');
     }
 
     /**
@@ -90,6 +95,7 @@ class ProductController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        Product::where('id', $id)->delete();
+        return redirect('/products')->with('status', 'Success');
     }
 }

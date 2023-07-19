@@ -11,8 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->string('usertype')->default(0);
+        Schema::create('services', function (Blueprint $table) {
+            $table->id();
+            $table->string('name')->unique();
+            $table->decimal('price', 3, 2);
+            $table->integer('deadline');
+            $table->timestamps();
         });
     }
 
@@ -21,7 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-        });
+        Schema::dropIfExists('services');
     }
 };

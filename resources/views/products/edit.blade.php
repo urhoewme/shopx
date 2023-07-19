@@ -39,7 +39,7 @@
                 <label for="exampleFormControlInput1" class="form-label">Product price:</label>
                 <input value="{{ $data->price }}" name="price" type="text" class="form-control w-50" id="exampleFormControlInput1">
             </div>
-            <button type="submit" class="btn btn-primary form-control">Add</button>
+            <button type="submit" class="btn btn-primary form-control">Submit</button>
         </form>
     </div>
 

@@ -37,7 +37,10 @@
                                 <a href="/product/edit/{{ $product->id }}" class="btn btn-primary btn-block">
                                     Edit
                                 </a>
-                                <a href="/product/delete{{ $product->id }}" class="btn btn-danger btn-block">Delete</a>
+                                <form method="POST" action="/product/delete/{{ $product->id }}">
+                                    @csrf
+                                    <button type="submit" class="btn btn-danger btn-block">Delete</button>
+                                </form>
                             </td>
                         </tr>
                     @endforeach
@@ -49,15 +52,46 @@
                     {{ $data->links() }}
                 </ul>
             </nav>
+        @else
+            <h1 class="fw-bold">Products</h1>
+            <section style="background-color: #eee;">
+                <div class="container py-5">
+                    <div class="row">
+                        @foreach($data as $product)
+                            <div class="col-md-12 col-lg-4 mb-4 mb-lg-0">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between">
+                                            <p class="small"><a href="#!" class="text-muted">Laptops</a></p>
+                                            <p class="fs-3 fw-bold">{{ $product->price }}$</p>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-3">
+                                            <h5 class="mb-0">{{ $product->title }}</h5>
+                                        </div>
+                                        <a href="/product/{{ $product->id }}">
+                                            <img class="card-img-top" src="/images/{{ $product->image }}">
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            </section>
+            <nav class="mt-4">
+                <ul class="pagination">
+                    {{ $data->links() }}
+                </ul>
+            </nav>
         @endif
-    @elseif(Auth::check() || !Auth::check())
+    @else
         <h1 class="fw-bold">Products</h1>
         <section style="background-color: #eee;">
             <div class="container py-5">
                 <div class="row">
                     @foreach($data as $product)
                         <div class="col-md-12 col-lg-4 mb-4 mb-lg-0">
-                            <div class="card">
+                            <div class="card mb-4">
                                 <div class="card-body">
                                     <div class="d-flex justify-content-between">
                                         <p class="small"><a href="#!" class="text-muted">Laptops</a></p>
@@ -69,14 +103,25 @@
                                     <a href="/product/{{ $product->id }}">
                                         <img class="card-img-top" src="/images/{{ $product->image }}">
                                     </a>
+                                    <form action="">
+                                        @csrf
+                                        <input value="Add to cart" type="submit" class="btn btn-primary mt-2">
+                                    </form>
                                 </div>
                             </div>
                         </div>
                     @endforeach
                 </div>
+
             </div>
         </section>
+        <nav class="mt-4">
+            <ul class="pagination">
+                {{ $data->links() }}
+            </ul>
+        </nav>
     @endif
+
 @endsection
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"

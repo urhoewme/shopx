@@ -18,35 +18,35 @@
                     <div class="col-12 col-md-9 col-lg-7 col-xl-6">
                         <div class="card" style="border-radius: 15px;">
                             <div class="card-body p-5">
-                                <h2 class="text-uppercase text-center mb-5">Log In</h2>
-                                <form method="POST" action="/login">
+                                <h2 class="text-uppercase text-center mb-5">Change user permissions</h2>
+                                <form method="POST" action="{{ url('/user/edit', $data->id) }}">
                                     @csrf
                                     <div class="form-outline mb-4">
-                                        <label class="form-label" for="form3Example3cg">Your Email</label>
-                                        <input name="email" type="email" id="form3Example3cg" class="form-control form-control-lg"/>
-                                        @error('email')
-                                        <span class="text-danger">{{ $message }}</span>
-                                        @enderror
+                                        <label class="form-label" for="form3Example3cg">User name</label>
+                                        <p class="fw-bold fs-4">{{ $data->name }}</p>
                                     </div>
 
                                     <div class="form-outline mb-4">
-                                        <label class="form-label" for="form3Example4cg">Password</label>
-                                        <input name="password" required type="password"
-                                               class="form-control form-control-lg"/>
-                                        @error('password')
-                                        <span class="text-danger">{{ $message }}</span>
-                                        @enderror
+                                        <label class="form-label" for="form3Example4cg">User email</label>
+                                        <p class="fw-bold fs-4">{{ $data->email }}</p>
+                                    </div>
+                                    <div class="form-outline mb-4">
+                                        <label class="form-label" for="form3Example4cg">User type</label>
+                                        <select class="form-select" name="usertype">
+                                            <option value="0" {{ ($data->usertype === '0') ? 'Selected' : '' }}>
+                                                User
+                                            </option>
+                                            <option value="1" {{ ($data->usertype === '1') ? 'Selected' : '' }}>
+                                                Admin
+                                            </option>
+                                        </select>
                                     </div>
                                     <div class="d-flex justify-content-center">
                                         <button type="submit" name="submit"
                                                 class="btn btn-primary btn-block btn-lg gradient-custom-4 text-white">
-                                            Log In
+                                            Submit
                                         </button>
                                     </div>
-
-                                    <p class="text-center text-muted mt-5 mb-0">Do not have an account ? <a href="/register"
-                                                                                                            class="fw-bold text-body"><u>Sign Up
-                                                here</u></a></p>
 
                                 </form>
 
