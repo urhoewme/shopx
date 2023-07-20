@@ -54,7 +54,8 @@ class ProductController extends Controller
     public function show(string $id)
     {
         $data = Product::query()->findOrFail($id);
-        return view('products.product', compact('data'));
+        $services = Service::all();
+        return view('products.product', compact('data', 'services'));
     }
 
     /**

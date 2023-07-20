@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf_token" content="{{ csrf_token() }}">
     <title>Shopix</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
@@ -34,10 +35,21 @@
                                     </div>
                                 </div>
                                 <p class="about">{{ $data->description }}</p>
+
                                 <div class="cart mt-4 align-items-center">
-                                    <button class="btn btn-danger text-uppercase mr-2 px-4">Add to cart</button>
-                                    <i class="fa fa-heart text-muted"></i> <i class="fa fa-share-alt text-muted"></i>
                                 </div>
+                                <form method="POST" action="{{ url('/product/add') }}">
+                                    @csrf
+                                    @foreach ($services as $service)
+                                        <li class="mb-2">
+                                            <input type="checkbox" name="services[]" value="{{ $service->id }}">
+                                            {{ $service->name }} (+${{ $service->price }})
+                                        </li>
+                                    @endforeach
+                                    <input type="hidden" name="product_id" value="{{ $data->id }}">
+                                    <input class="form-control mb-2" type="number" name="quantity" value="1">
+                                    <button class="btn btn-primary" type="submit">Add to cart</button>
+                                </form>
                             </div>
                         </div>
                     </div>

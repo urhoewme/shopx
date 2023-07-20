@@ -17,15 +17,15 @@
             @csrf
             <div class="mb-3">
                 <label for="exampleFormControlInput1" class="form-label">Service name:</label>
-                <input name="title" type="text" class="form-control" id="exampleFormControlInput1">
+                <input name="name" type="text" class="form-control" id="exampleFormControlInput1">
             </div>
             <div class="mb-3">
                 <label for="exampleFormControlTextarea1" class="form-label">Service price:</label>
-                <input class="form-control" type="text">
+                <input name="price" class="form-control" type="text">
             </div>
             <div class="mb-3">
                 <label for="exampleFormControlInput1" class="form-label">Service deadline:</label>
-                <input name="price" type="text" class="form-control" id="exampleFormControlInput1">
+                <input name="deadline" type="text" class="form-control" id="exampleFormControlInput1">
             </div>
             <button type="submit" class="btn btn-primary form-control">Add</button>
         </form>

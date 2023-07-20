@@ -20,7 +20,7 @@
                 <a class="nav-link" aria-current="page" href="/">Home</a>
                 <a class="nav-link" href="/products">Products</a>
                 @if(Auth::check())
-                <a class="nav-link" href="/dashboard">Dashboard</a>
+                    <a class="nav-link" href="/dashboard">Dashboard</a>
                 @endif
                 @if(Auth::check())
                     <div class="navbar-nav">

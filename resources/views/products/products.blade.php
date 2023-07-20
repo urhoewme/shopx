@@ -10,6 +10,12 @@
 <body>
 @extends(Auth::check() ? (Auth::user()->usertype == \App\Models\User::ROLE_ADMIN ? 'layouts.admin' : 'layouts.main' ) : 'layouts.main')
 @section('content')
+    @if(session()->has('message'))
+        <div class="alert alert-success">
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            {{ session()->get('message') }}
+        </div>
+    @endif
     @if(Auth::check())
         @if(Auth::user()->usertype == \App\Models\User::ROLE_ADMIN)
             <a href="/product/create" class="btn btn-primary mb-2">Add new product</a>
@@ -103,10 +109,6 @@
                                     <a href="/product/{{ $product->id }}">
                                         <img class="card-img-top" src="/images/{{ $product->image }}">
                                     </a>
-                                    <form action="">
-                                        @csrf
-                                        <input value="Add to cart" type="submit" class="btn btn-primary mt-2">
-                                    </form>
                                 </div>
                             </div>
                         </div>

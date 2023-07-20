@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\LoginController;
@@ -43,3 +44,5 @@ Route::get('/logout', [LoginController::class, 'logout'])->middleware(Authentica
 Route::get('/services', [ServiceController::class, 'index'])->middleware(AdminAuth::class);
 Route::get('/service/create', [ServiceController::class, 'create'])->middleware(AdminAuth::class);
 Route::post('/service/create', [ServiceController::class, 'store'])->middleware(AdminAuth::class);
+
+Route::post('/product/add', [CartController::class, 'addItem']);

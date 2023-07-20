@@ -20,10 +20,6 @@ class ServiceController extends Controller
 
     public function store(Request $request)
     {
-        echo "<pre>";
-        var_dump($request);
-        echo "<pre>";
-        exit;
         $request->validate([
             'name' => 'required|string|max:255',
             'price' => 'required|numeric',
