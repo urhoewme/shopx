@@ -10,7 +10,7 @@ use App\Models\Cart;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use App\Models\CartItemServices;
+use App\Models\CartItemsServices;
 
 class CartItem extends Model
 {
@@ -28,6 +28,6 @@ class CartItem extends Model
 
     public function cartItemsServices(): HasMany
     {
-        return $this->hasMany(CartItemServices::class);
+        return $this->hasMany(CartItemsServices::class);
     }
 }
