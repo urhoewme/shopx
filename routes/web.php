@@ -46,3 +46,4 @@ Route::get('/service/create', [ServiceController::class, 'create'])->middleware(
 Route::post('/service/create', [ServiceController::class, 'store'])->middleware(AdminAuth::class);
 
 Route::post('/product/add', [CartController::class, 'addItem']);
+Route::get('/cart', [CartController::class, 'index']);
