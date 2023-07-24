@@ -15,10 +15,11 @@ class CartController extends Controller
 {
     public function index()
     {
-        $data = [];
         $id = \auth()->user()->id;
         $user = User::findOrFail($id);
         $carts = $user->cart()->get();
+        $cartItems = $user->cartOwner()->get();
+        $data = $cartItems;
 //        foreach ($carts as $cart) {
 //            $cartItems = $user->cartOwner()->get();
 //            foreach ($cartItems as $cartItem) {
@@ -31,7 +32,7 @@ class CartController extends Controller
 //                }
 //            }
 //        }
-        return view('cart.cart', compact('carts'));
+        return view('cart.cart', compact('data'));
     }
 
 
@@ -61,7 +62,6 @@ class CartController extends Controller
                     }
                 }
             }
-
             $cart->price += Product::find($request->product_id)->price * $request->quantity;
             $cart->save();
             return redirect('/products');
