@@ -16,8 +16,9 @@ class Service extends Model
         'deadline'
     ];
 
-    public function cartItemsServices(): HasMany
+    public function cartItems()
     {
-        return $this->hasMany(CartItemsServices::class);
+        return $this->belongsToMany(CartItem::class, 'cart_items_services', 'service_id', 'cart_item_id');
+
     }
 }

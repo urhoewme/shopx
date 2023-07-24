@@ -16,18 +16,18 @@ class CartItem extends Model
 {
     use HasFactory;
 
-    public function carts(): BelongsTo
+    public function carts(): HasMany
     {
-        return $this->belongsTo(Cart::class);
+        return $this->hasMany(Cart::class);
     }
 
-    public function products(): HasOne
+    public function products(): BelongsTo
     {
-        return $this->hasOne(Product::class);
+        return $this->belongsTo(Product::class);
     }
 
-    public function cartItemsServices(): HasMany
+    public function services()
     {
-        return $this->hasMany(CartItemsServices::class);
+        return $this->belongsToMany(Service::class, 'cart_items_services', 'cart_item_id', 'service_id');
     }
 }
