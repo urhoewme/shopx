@@ -15,23 +15,23 @@ class CartController extends Controller
 {
     public function index()
     {
+        $data = [];
         $id = \auth()->user()->id;
         $user = User::findOrFail($id);
         $carts = $user->cart()->get();
         $cartItems = $user->cartOwner()->get();
-        $data = $cartItems;
-//        foreach ($carts as $cart) {
+        $data['cartItems'] = $cartItems->toArray();
 //            $cartItems = $user->cartOwner()->get();
+//            dd($cartItems->toArray());
 //            foreach ($cartItems as $cartItem) {
-//                // a place to define cartItem info
+                // a place to define cartItem info
 //                foreach ($cartItem::all() as $item) {
 //                    $services = $item->services;
 //                    foreach ($services as $service) {
-//                        // a place to define service info
+//                        dd($service);
 //                    }
 //                }
 //            }
-//        }
         return view('cart.cart', compact('data'));
     }
 
@@ -49,6 +49,8 @@ class CartController extends Controller
             $cartItem->quantity = $request->quantity;
             $cartItem->cart_id = $cart->id;
             $cartItem->save();
+
+
 
             if ($request->has('services')) {
                 foreach ($request->services as $service_id) {

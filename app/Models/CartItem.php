@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\Product;
 use App\Models\Cart;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use App\Models\CartItemsServices;
@@ -21,13 +22,15 @@ class CartItem extends Model
         return $this->hasMany(Cart::class);
     }
 
-    public function products(): BelongsTo
+    public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class, 'product_id');
     }
+
 
     public function services()
     {
         return $this->belongsToMany(Service::class, 'cart_items_services', 'cart_item_id', 'service_id');
     }
+    protected $with = ['services', 'product'];
 }

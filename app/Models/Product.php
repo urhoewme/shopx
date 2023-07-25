@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\CartItem;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Product extends Model
 {
@@ -19,8 +20,8 @@ class Product extends Model
         'price'
     ];
 
-    public function cartItems(): HasOne
+    public function cartItems(): HasMany
     {
-        return $this->hasOne(CartItem::class);
+        return $this->hasMany(CartItem::class);
     }
 }

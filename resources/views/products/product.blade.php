@@ -43,7 +43,7 @@
                                     @foreach ($services as $service)
                                         <li class="mb-2">
                                             <input type="checkbox" name="services[]" value="{{ $service->id }}">
-                                            {{ $service->name }} (+${{ $service->price }})
+                                            {{ $service->name }} (+${{ $service->price }}) | {{ $service->deadline }} day(s)
                                         </li>
                                     @endforeach
                                     <input type="hidden" name="product_id" value="{{ $data->id }}">

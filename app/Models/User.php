@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -55,8 +56,8 @@ class User extends Authenticatable
         return $this->hasOne(Cart::class);
     }
 
-    public function cartOwner(): HasOneThrough
+    public function cartOwner(): HasManyThrough
     {
-        return $this->hasOneThrough(CartItem::class, Cart::class);
+        return $this->hasManyThrough(CartItem::class, Cart::class);
     }
 }

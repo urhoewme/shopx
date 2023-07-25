@@ -5,6 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf_token" content="{{ csrf_token() }}">
     <title>Shopix</title>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+            integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"
+            integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V"
+            crossorigin="anonymous"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
 </head>
@@ -24,18 +30,15 @@
                                         class="fas fa-angle-down mt-1"></i></a></p>
                         </div>
                     </div>
-                    @foreach($data as $cartItem)
-                        @php
-                            $product = $cartItem->products()->get()
-                        @endphp
+                    @foreach($data['cartItems'] as $cartItem)
                         <div class="card rounded-3 mb-4">
                             <div class="card-body p-4">
                                 <div class="row d-flex justify-content-between align-items-center">
                                     <div class="col-md-2 col-lg-2 col-xl-2">
-                                        <img class="card-img-top" src="/images/{{ $product[0]['image'] }}">
+                                        <img class="card-img-top" src="/images/{{ $cartItem['product']['image'] }}">
                                     </div>
                                     <div class="col-md-3 col-lg-3 col-xl-3">
-                                        <p class="lead fw-normal mb-2">{{ $product[0]['title'] }}</p>
+                                        <p class="lead fw-normal mb-2">{{ $cartItem['product']['title'] }}</p>
                                     </div>
                                     <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
                                         <button class="btn btn-link px-2"
@@ -43,7 +46,7 @@
                                             <i class="fas fa-minus"></i>
                                         </button>
 
-                                        <p class="lead fw-normal">{{ $cartItem->quantity }}</p>
+                                        <p class="lead fw-normal">{{ $cartItem['quantity'] }}</p>
 
                                         <button class="btn btn-link px-2"
                                                 onclick="this.parentNode.querySelector('input[type=number]').stepUp()">
@@ -51,11 +54,39 @@
                                         </button>
                                     </div>
                                     <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
-                                        <h5 class="mb-0">${{ $product[0]['price'] }}</h5>
+                                        <label>Product price</label>
+                                        <h5 class="mb-0">${{ $cartItem['product']['price'] }}</h5>
                                     </div>
+                                    {{--                                    <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">--}}
+                                    {{--                                        <label>Services price</label>--}}
+                                    {{--                                        <h5 class="mb-0"></h5>--}}
+                                    {{--                                    </div>--}}
                                     <div class="col-md-1 col-lg-1 col-xl-1 text-end">
                                         <a href="#!" class="text-danger"><i class="fas fa-trash fa-lg"></i></a>
                                     </div>
+                                    @if($cartItem['services'])
+                                        {{--                                        <ul class="list-group list-group-flush">--}}
+                                        {{--                                            <div class="dropdown">--}}
+                                        {{--                                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">--}}
+                                        {{--                                                    Services:--}}
+                                        {{--                                                </button>--}}
+                                        {{--                                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">--}}
+                                        {{--                                                    @foreach($cartItem['services'] as $service)--}}
+                                        {{--                                                        <li class="list-group-item">{{ $service['name'] }} {{ $service['price'] }}$</li>--}}
+                                        {{--                                                    @endforeach--}}
+                                        {{--                                                </ul>--}}
+                                        {{--                                            </div>--}}
+                                        {{--                                        </ul>--}}
+                                        <button class="accordion-button collapsed" type="button"
+                                                data-bs-toggle="collapse"
+                                                data-bs-target="#flush-collapse{{ $cartItem['id'] }}"
+                                                aria-expanded="false" aria-controls="flush-collapseOne">
+                                            Accordion Item #1
+                                        </button>
+                                        <div class="collapse">
+                                            Hello
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
                         </div>
