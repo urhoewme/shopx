@@ -44,6 +44,9 @@ Route::get('/logout', [LoginController::class, 'logout'])->middleware(Authentica
 Route::get('/services', [ServiceController::class, 'index'])->middleware(AdminAuth::class);
 Route::get('/service/create', [ServiceController::class, 'create'])->middleware(AdminAuth::class);
 Route::post('/service/create', [ServiceController::class, 'store'])->middleware(AdminAuth::class);
+Route::get('/service/edit/{id}', [ServiceController::class, 'edit'])->middleware(AdminAuth::class);
+Route::post('/service/edit/{id}', [ServiceController::class, 'update'])->middleware(AdminAuth::class);
+Route::post('/service/delete/{id}', [ServiceController::class, 'destroy'])->middleware(AdminAuth::class);
 
-Route::post('/product/add', [CartController::class, 'addItem']);
+Route::post('/product/add', [CartController::class, 'addItem'])->middleware(Authenticate::class);
 Route::get('/cart', [CartController::class, 'index']);

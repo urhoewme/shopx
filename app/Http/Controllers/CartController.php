@@ -46,6 +46,8 @@ class CartController extends Controller
             ],['price' => 0]);
             $cartItem = new CartItem();
             $cartItem->product_id = $request->product_id;
+            $product = Product::query()->findOrFail($request->product_id);
+            $cartItem->price = $product->price * $request->quantity;
             $cartItem->quantity = $request->quantity;
             $cartItem->cart_id = $cart->id;
             $cartItem->save();
@@ -61,6 +63,8 @@ class CartController extends Controller
                         $cartItemService->service_id = $service_id;
                         $cartItemService->save();
                         $cart->price += $service->price * $request->quantity;
+                        $cartItem->price += $service->price * $request->quantity;
+                        $cartItem->save();
                     }
                 }
             }

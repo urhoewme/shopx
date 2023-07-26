@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Shopix</title>
+    <title>Shopx</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
 </head>
@@ -60,12 +60,21 @@
             </nav>
         @else
             <h1 class="fw-bold">Products</h1>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">Sort by:</th>
+                    <th scope="col">@sortablelink('title')</th>
+                    <th scope="col">@sortablelink('price')</th>
+                </tr>
+                </thead>
+            </table>
             <section style="background-color: #eee;">
                 <div class="container py-5">
                     <div class="row">
                         @foreach($data as $product)
                             <div class="col-md-12 col-lg-4 mb-4 mb-lg-0">
-                                <div class="card">
+                                <div class="card mb-4">
                                     <div class="card-body">
                                         <div class="d-flex justify-content-between">
                                             <p class="small"><a href="#!" class="text-muted">Laptops</a></p>
@@ -82,6 +91,7 @@
                             </div>
                         @endforeach
                     </div>
+
                 </div>
             </section>
             <nav class="mt-4">

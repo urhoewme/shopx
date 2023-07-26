@@ -5,19 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf_token" content="{{ csrf_token() }}">
     <title>Shopix</title>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
-            integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
-            crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"
-            integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V"
-            crossorigin="anonymous"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
 </head>
 <body>
 @extends('layouts.main')
 @section('content')
-    <section class="h-100" style="background-color: #eee;">
+    @php
+    $totalPrice = 0;
+    $servicePrice = 0;
+    @endphp
+    <section class="h-100 rounded" style="background-color: #eee;">
         <div class="container h-100 py-5">
             <div class="row d-flex justify-content-center align-items-center h-100">
                 <div class="col-10">
@@ -57,42 +55,39 @@
                                         <label>Product price</label>
                                         <h5 class="mb-0">${{ $cartItem['product']['price'] }}</h5>
                                     </div>
-                                    {{--                                    <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">--}}
-                                    {{--                                        <label>Services price</label>--}}
-                                    {{--                                        <h5 class="mb-0"></h5>--}}
-                                    {{--                                    </div>--}}
                                     <div class="col-md-1 col-lg-1 col-xl-1 text-end">
                                         <a href="#!" class="text-danger"><i class="fas fa-trash fa-lg"></i></a>
                                     </div>
                                     @if($cartItem['services'])
-                                        {{--                                        <ul class="list-group list-group-flush">--}}
-                                        {{--                                            <div class="dropdown">--}}
-                                        {{--                                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">--}}
-                                        {{--                                                    Services:--}}
-                                        {{--                                                </button>--}}
-                                        {{--                                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">--}}
-                                        {{--                                                    @foreach($cartItem['services'] as $service)--}}
-                                        {{--                                                        <li class="list-group-item">{{ $service['name'] }} {{ $service['price'] }}$</li>--}}
-                                        {{--                                                    @endforeach--}}
-                                        {{--                                                </ul>--}}
-                                        {{--                                            </div>--}}
-                                        {{--                                        </ul>--}}
-                                        <button class="accordion-button collapsed" type="button"
-                                                data-bs-toggle="collapse"
-                                                data-bs-target="#flush-collapse{{ $cartItem['id'] }}"
-                                                aria-expanded="false" aria-controls="flush-collapseOne">
-                                            Accordion Item #1
-                                        </button>
-                                        <div class="collapse">
-                                            Hello
+                                        <div class="accordion mt-2" id="chapters{{ $cartItem['id'] }}">
+                                            <div class="accordion-item">
+                                                <h2 class="accordion-header" id="heading{{ $cartItem['id'] }}">
+                                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ $cartItem['id'] }}" aria-expanded="true" aria-controls="collapse{{ $cartItem['id'] }}">
+                                                        Services
+                                                    </button>
+                                                </h2>
+                                                @foreach($cartItem['services'] as $service)
+                                                    <div id="collapse{{ $cartItem['id'] }}" class="accordion-collapse collapse p-2" aria-labelledby="heading{{ $cartItem['id'] }}" data-bs-parent="#chapters{{ $cartItem['id'] }}">
+                                                        {{ $service['name'] }} | {{ $service['price'] }}$ | {{ $service['deadline'] }} day(s)
+                                                    </div>
+                                                    @php
+                                                        $servicePrice += $service['price'] * $cartItem['quantity'];
+                                                    @endphp
+                                                @endforeach
+                                            </div>
                                         </div>
                                     @endif
                                 </div>
                             </div>
                         </div>
+                        @php
+                        $totalPrice += $cartItem['product']['price'] * $cartItem['quantity'];
+                        @endphp
                     @endforeach
                     <div class="card">
                         <div class="card-body">
+                            <label>Total price:</label>
+                            <p>{{ $totalPrice + $servicePrice }}$</p>
                             <button type="button" class="btn btn-warning btn-block btn-lg">Proceed to Pay</button>
                         </div>
                     </div>
@@ -102,8 +97,5 @@
         </div>
     </section>
 @endsection
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
-        crossorigin="anonymous"></script>
 </body>
 </html>

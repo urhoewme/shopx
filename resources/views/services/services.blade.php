@@ -18,6 +18,7 @@
                 <th>Service</th>
                 <th>Price</th>
                 <th>Deadline</th>
+                <th>Actions</th>
             </tr>
             </thead>
             <tbody>
@@ -29,6 +30,13 @@
                     <td>{{ $service->price }}</td>
                     <td>
                         {{ $service->deadline }}
+                    </td>
+                    <td>
+                        <a class="btn btn-primary" href="/service/edit/{{ $service->id }}">Edit</a>
+                        <form method="POST" action="/service/delete/{{ $service->id }}">
+                            @csrf
+                            <button type="submit" class="btn btn-danger btn-block">Delete</button>
+                        </form>
                     </td>
                 </tr>
             @endforeach
