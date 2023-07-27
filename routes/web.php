@@ -49,4 +49,5 @@ Route::post('/service/edit/{id}', [ServiceController::class, 'update'])->middlew
 Route::post('/service/delete/{id}', [ServiceController::class, 'destroy'])->middleware(AdminAuth::class);
 
 Route::post('/product/add', [CartController::class, 'addItem'])->middleware(Authenticate::class);
-Route::get('/cart', [CartController::class, 'index']);
+Route::get('/cart', [CartController::class, 'index'])->middleware(Authenticate::class);
+Route::post('/cart/checkout', [CartController::class, 'checkout'])->middleware(Authenticate::class)->name('cart.checkout');

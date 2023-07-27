@@ -31,11 +31,4 @@ class Product extends Model
     {
         return $this->hasMany(CartItem::class);
     }
-
-//    protected function getPrice(): Attribute
-//    {
-//        return Attribute::make(
-//            get: fn ()
-//        )
-//    }
 }
