@@ -9,6 +9,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
 use App\Http\Middleware\Authenticate;
 use App\Http\Middleware\AdminAuth;
+use App\Http\Controllers\CheckoutController;
 
 /*
 |-------------------------------------------------------------------
@@ -50,4 +51,7 @@ Route::post('/service/delete/{id}', [ServiceController::class, 'destroy'])->midd
 
 Route::post('/product/add', [CartController::class, 'addItem'])->middleware(Authenticate::class);
 Route::get('/cart', [CartController::class, 'index'])->middleware(Authenticate::class);
-Route::post('/cart/checkout', [CartController::class, 'checkout'])->middleware(Authenticate::class)->name('cart.checkout');
+Route::post('/checkout', [CheckoutController::class, 'checkout'])->middleware(Authenticate::class)->name('cart.checkout');
+
+Route::get('/checkout/success', [CheckoutController::class, 'success'])->middleware(Authenticate::class)->name('checkout.success');
+Route::get('/checkout/failure', [CheckoutController::class, 'failure'])->middleware(Authenticate::class)->name('checkout.failure');

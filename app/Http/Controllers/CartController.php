@@ -24,36 +24,7 @@ class CartController extends Controller
         return view('cart.cart', compact('data'));
     }
 
-    public function checkout(Request $request)
-    {
-        $id = \auth()->user()->id;
-        $user = User::findOrFail($id);
-        $cartItems = $user->cartOwner()->get();
-        $lineItems = [];
-        foreach ($cartItems as $cartItem) {
-            $services = $cartItem->services;
-            foreach ($services as $service) {
-                $lineItems[] = [
-                    'price_data' => [
-                        'currency' => 'usd',
-                        'product_data' => [
-                            'name' => $cartItem->product->title,
-                        ],
-                        'unit_amount_decimal' => ($cartItem->product->price + $service['price']) * 100,
-                    ],
-                    'quantity' => $cartItem['quantity'],
-                ];
-            }
-        }
-        $stripe = new \Stripe\StripeClient(getenv('STRIPE_SECRET_KEY'));
-        $checkout_session = $stripe->checkout->sessions->create([
-            'line_items' => $lineItems,
-            'mode' => 'payment',
-            'success_url' => 'http://localhost:4242/success',
-            'cancel_url' => 'http://localhost:4242/cancel',
-        ]);
-        return redirect($checkout_session->url);
-    }
+
 
     public function addItem(Request $request)
     {
