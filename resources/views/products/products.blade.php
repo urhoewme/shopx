@@ -19,6 +19,16 @@
     @if(Auth::check())
         @if(Auth::user()->usertype == \App\Models\User::ROLE_ADMIN)
             <a href="/product/create" class="btn btn-primary mb-2">Add new product</a>
+            <form class="d-flex" role="search">
+                @csrf
+                <input
+                    type="search"
+                    class="form-control me-2"
+                    name="search"
+                    value="{{ $query }}"
+                >
+                <button class="btn btn-outline-success" type="submit">Search</button>
+            </form>
             <div class="table-responsive">
                 <table class="table align-middle mb-0 bg-white">
                     <thead class="bg-light">
@@ -55,7 +65,7 @@
             </div>
             <nav class="mt-4">
                 <ul class="pagination">
-                    {{ $data->links() }}
+                    {{ $data->appends(['search' => $query])->links() }}
                 </ul>
             </nav>
         @else
@@ -69,6 +79,16 @@
                 </tr>
                 </thead>
             </table>
+            <form class="d-flex mb-2" role="search">
+                @csrf
+                <input
+                    type="search"
+                    class="form-control me-2"
+                    name="search"
+                    value="{{ $query }}"
+                >
+                <button class="btn btn-outline-success" type="submit">Search</button>
+            </form>
             <section style="background-color: #eee;">
                 <div class="container py-5">
                     <div class="row">
@@ -96,12 +116,31 @@
             </section>
             <nav class="mt-4">
                 <ul class="pagination">
-                    {{ $data->links() }}
+                    {{ $data->appends(['search' => $query])->links() }}
                 </ul>
             </nav>
         @endif
     @else
         <h1 class="fw-bold">Products</h1>
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">Sort by:</th>
+                <th scope="col">@sortablelink('title')</th>
+                <th scope="col">@sortablelink('price')</th>
+            </tr>
+            </thead>
+        </table>
+        <form class="d-flex mb-2" role="search">
+            @csrf
+            <input
+                type="search"
+                class="form-control me-2"
+                name="search"
+                value="{{ $query }}"
+            >
+            <button class="btn btn-outline-success" type="submit">Search</button>
+        </form>
         <section style="background-color: #eee;">
             <div class="container py-5">
                 <div class="row">
@@ -129,14 +168,11 @@
         </section>
         <nav class="mt-4">
             <ul class="pagination">
-                {{ $data->links() }}
+                {{ $data->appends(['search' => $query])->links() }}
             </ul>
         </nav>
     @endif
 
 @endsection
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
-        crossorigin="anonymous"></script>
 </body>
 </html>

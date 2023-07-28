@@ -27,7 +27,7 @@ Route::get('/dashboard', [HomeController::class, 'dashboard'])->middleware(Authe
 Route::get('/user/edit/{id}', [HomeController::class, 'edit'])->middleware(AdminAuth::class);
 Route::post('/user/edit/{id}', [HomeController::class, 'update'])->middleware(AdminAuth::class);
 
-Route::get('/products', [ProductController::class, 'index']);
+Route::get('/products', [ProductController::class, 'index'])->name('products');
 Route::get('/product/create', [ProductController::class, 'create'])->middleware(AdminAuth::class);
 Route::post('/product/create', [ProductController::class, 'store'])->middleware(AdminAuth::class);
 Route::get('/product/{id}', [ProductController::class, 'show']);
@@ -51,7 +51,10 @@ Route::post('/service/delete/{id}', [ServiceController::class, 'destroy'])->midd
 
 Route::post('/product/add', [CartController::class, 'addItem'])->middleware(Authenticate::class);
 Route::get('/cart', [CartController::class, 'index'])->middleware(Authenticate::class);
-Route::post('/checkout', [CheckoutController::class, 'checkout'])->middleware(Authenticate::class)->name('cart.checkout');
+Route::post('/cart/delete', [CartController::class, 'clearCart'])->middleware(Authenticate::class)->name('cart.delete');
+Route::post('/cart/product/delete/{id}', [CartController::class, 'deleteCartItem'])->middleware(Authenticate::class)->name('cartItem.delete');
+Route::post('/cart/product/{cart_item_id}/service/delete/{service_id}', [CartController::class, 'deleteService'])->middleware(Authenticate::class)->name('service.delete');
 
+Route::post('/checkout', [CheckoutController::class, 'checkout'])->middleware(Authenticate::class)->name('cart.checkout');
 Route::get('/checkout/success', [CheckoutController::class, 'success'])->middleware(Authenticate::class)->name('checkout.success');
 Route::get('/checkout/failure', [CheckoutController::class, 'failure'])->middleware(Authenticate::class)->name('checkout.failure');

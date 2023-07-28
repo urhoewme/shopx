@@ -14,8 +14,9 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $data = Product::sortable()->paginate(9);
-        return view('products.products', compact('data'));
+        $query = \request('search');
+        $data = Product::where('title', 'like', '%' . $query . '%')->paginate(9);
+        return view('products.products', compact('data', 'query'));
     }
 
     /**

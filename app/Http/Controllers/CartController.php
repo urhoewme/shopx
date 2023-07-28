@@ -28,6 +28,9 @@ class CartController extends Controller
 
     public function addItem(Request $request)
     {
+        $request->validate([
+            'quantity' => 'required|numeric',
+        ]);
         if (\auth()->user()) {
             $user_id = \auth()->user()->id;
             $cart = Cart::updateOrCreate([
@@ -58,5 +61,28 @@ class CartController extends Controller
             return redirect('/products');
         }
         return redirect('/login');
+    }
+
+    public function clearCart()
+    {
+        $user_id = \auth()->user()->id;
+        Cart::where('user_id', $user_id)->delete();
+        return redirect('/cart')->with('status', 'Cart successfully cleared');
+    }
+
+    public function deleteCartItem(string $id)
+    {
+        CartItem::where('id', $id)->delete();
+        return redirect('/cart')->with('status', 'Product has been deleted successfully');
+    }
+
+    public function deleteService(string $cart_item_id, string $service_id)
+    {
+        CartItemsServices::where([
+            ['service_id', '=', $service_id],
+            ['cart_item_id', '=', $cart_item_id],
+        ])->delete();
+
+        return redirect('/cart')->with('status', 'Service has been deleted');
     }
 }
