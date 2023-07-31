@@ -25,7 +25,6 @@ class CartController extends Controller
     }
 
 
-
     public function addItem(Request $request)
     {
         $request->validate([
@@ -84,5 +83,21 @@ class CartController extends Controller
         ])->delete();
 
         return redirect('/cart')->with('status', 'Service has been deleted');
+    }
+
+    public function increaseQuantity(Request $request, string $id)
+    {
+        $cartItem = CartItem::where('id', $id);
+        $cartItem->quantity = $cartItem->quantity + 1;
+        $cartItem->save();
+        return view('/cart');
+    }
+
+    public function decreaseQuantity(Request $request, string $id)
+    {
+        $cartItem = CartItem::where('id', $id);
+        $cartItem->quantity = $cartItem->quantity - 1;
+        $cartItem->save();
+        return view('/cart');
     }
 }

@@ -12,11 +12,23 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+
+    public function index(Request $request)
     {
         $query = \request('search');
-        $data = Product::where('title', 'like', '%' . $query . '%')->paginate(9);
-        return view('products.products', compact('data', 'query'));
+
+        if ($request->sorting == 'title') {
+            $data = Product::orderBy('title', 'ASC')->paginate(9);
+        } else if ($request->sorting == "title-desc") {
+            $data = Product::orderBy('title', 'DESC')->paginate(9);
+        } else if ($request->sorting == "price") {
+            $data = Product::orderBy('price', 'ASC')->paginate(9);
+        } else if ($request->sorting == "price-desc") {
+            $data = Product::orderBy('price', 'DESC')->paginate(9);
+        } else {
+            $data = Product::where('title', 'like', '%' . $query . '%')->paginate(9);
+        }
+        return view('products.products', ['data' => $data, 'sorting' => $request->sorting, 'query' => $query]);
     }
 
     /**
@@ -74,10 +86,10 @@ class ProductController extends Controller
     public function update(Request $request, string $id)
     {
         $data = Product::query()->findOrFail($id);
-        if($request->image != ''){
+        if ($request->image != '') {
             $path = public_path('images');
-            if($data->image != ''  && $data->image != null){
-                $file_old = $path.'/'.$data->image;
+            if ($data->image != '' && $data->image != null) {
+                $file_old = $path . '/' . $data->image;
                 unlink($file_old);
             }
             $file = $request->image;

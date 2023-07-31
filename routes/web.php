@@ -54,6 +54,8 @@ Route::get('/cart', [CartController::class, 'index'])->middleware(Authenticate::
 Route::post('/cart/delete', [CartController::class, 'clearCart'])->middleware(Authenticate::class)->name('cart.delete');
 Route::post('/cart/product/delete/{id}', [CartController::class, 'deleteCartItem'])->middleware(Authenticate::class)->name('cartItem.delete');
 Route::post('/cart/product/{cart_item_id}/service/delete/{service_id}', [CartController::class, 'deleteService'])->middleware(Authenticate::class)->name('service.delete');
+Route::post('/cart/product/{id}/quantity/increase', [CartController::class, 'increaseQuantity'])->middleware(Authenticate::class);
+Route::post('/cart/product/{id}/quantity/decrease', [CartController::class, 'decreaseQuantity'])->middleware(Authenticate::class);
 
 Route::post('/checkout', [CheckoutController::class, 'checkout'])->middleware(Authenticate::class)->name('cart.checkout');
 Route::get('/checkout/success', [CheckoutController::class, 'success'])->middleware(Authenticate::class)->name('checkout.success');

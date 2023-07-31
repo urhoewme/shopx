@@ -70,15 +70,17 @@
             </nav>
         @else
             <h1 class="fw-bold">Products</h1>
-            <table class="table">
-                <thead>
-                <tr>
-                    <th scope="col">Sort by:</th>
-                    <th scope="col">@sortablelink('title')</th>
-                    <th scope="col">@sortablelink('price')</th>
-                </tr>
-                </thead>
-            </table>
+            <form class="mb-2">
+                @csrf
+                <select name="sorting" class="form-select mb-2" aria-label="Default select example">
+                    <option value="default" selected>Default sorting</option>
+                    <option value="title">Title: from A-Z</option>
+                    <option value="title-desc">Title: from Z-A</option>
+                    <option value="price">Price: from low to high</option>
+                    <option value="price-desc">Price: from high to low</option>
+                </select>
+                <button class="form-control btn btn-primary">Apply</button>
+            </form>
             <form class="d-flex mb-2" role="search">
                 @csrf
                 <input
@@ -116,21 +118,23 @@
             </section>
             <nav class="mt-4">
                 <ul class="pagination">
-                    {{ $data->appends(['search' => $query])->links() }}
+                    {{ $data->appends(['search' => $query, 'sorting' => $sorting])->links() }}
                 </ul>
             </nav>
         @endif
     @else
         <h1 class="fw-bold">Products</h1>
-        <table class="table">
-            <thead>
-            <tr>
-                <th scope="col">Sort by:</th>
-                <th scope="col">@sortablelink('title')</th>
-                <th scope="col">@sortablelink('price')</th>
-            </tr>
-            </thead>
-        </table>
+        <form class="mb-2">
+            @csrf
+            <select name="sorting" class="form-select mb-2" aria-label="Default select example">
+                <option value="default" selected>Default sorting</option>
+                <option value="title">Title: from A-Z</option>
+                <option value="title-desc">Title: from Z-A</option>
+                <option value="price">Price: from low to high</option>
+                <option value="price-desc">Price: from high to low</option>
+            </select>
+            <button class="form-control btn btn-primary">Apply</button>
+        </form>
         <form class="d-flex mb-2" role="search">
             @csrf
             <input
@@ -168,7 +172,7 @@
         </section>
         <nav class="mt-4">
             <ul class="pagination">
-                {{ $data->appends(['search' => $query])->links() }}
+                {{ $data->appends(['search' => $query, 'sorting' => $sorting])->links() }}
             </ul>
         </nav>
     @endif
