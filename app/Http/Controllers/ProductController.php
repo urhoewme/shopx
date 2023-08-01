@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Models\ProductsTags;
 use App\Models\Service;
+use App\Models\Tag;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
@@ -16,7 +18,6 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         $query = \request('search');
-
         if ($request->sorting == 'title') {
             $data = Product::orderBy('title', 'ASC')->paginate(9);
         } else if ($request->sorting == "title-desc") {
@@ -36,7 +37,8 @@ class ProductController extends Controller
      */
     public function create()
     {
-        return view('products.create');
+        $data = Tag::all();
+        return view('products.create', compact('data'));
     }
 
     /**
@@ -58,6 +60,17 @@ class ProductController extends Controller
         $product->price = $request->price;
         $product->image = $fileName;
         $product->save();
+        if ($request->has('tags')) {
+            foreach ($request->tags as $tag_id) {
+                $tag = Tag::find($tag_id);
+                if ($tag) {
+                    $productTag = new ProductsTags();
+                    $productTag->product_id = $product->id;
+                    $productTag->tag_id = $tag_id;
+                    $productTag->save();
+                }
+            }
+        }
         return redirect('/products')->with('status', 'Success');
     }
 

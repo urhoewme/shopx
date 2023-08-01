@@ -34,6 +34,12 @@
                 <label for="exampleFormControlInput1" class="form-label">Product price:</label>
                 <input name="price" type="text" class="form-control w-50" id="exampleFormControlInput1">
             </div>
+            @foreach ($data as $tag)
+                <li class="mb-2">
+                    <input type="checkbox" name="tags[]" value="{{ $tag->id }}">
+                    {{ $tag->name }}
+                </li>
+            @endforeach
             <button type="submit" class="btn btn-primary form-control">Add</button>
         </form>
     </div>

@@ -19,7 +19,7 @@
     @if(Auth::check())
         @if(Auth::user()->usertype == \App\Models\User::ROLE_ADMIN)
             <a href="/product/create" class="btn btn-primary mb-2">Add new product</a>
-            <form class="d-flex" role="search">
+            <form class="d-flex mb-2" role="search">
                 @csrf
                 <input
                     type="search"
@@ -99,7 +99,18 @@
                                 <div class="card mb-4">
                                     <div class="card-body">
                                         <div class="d-flex justify-content-between">
-                                            <p class="small"><a href="#!" class="text-muted">Laptops</a></p>
+                                            @if($product->tags)
+                                            <div class="dropdown">
+                                                <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    Tags
+                                                </button>
+                                                <ul class="dropdown-menu">
+                                                    @foreach($product->tags as $tag)
+                                                        <li>{{ $tag->name }}</li>
+                                                    @endforeach
+                                                </ul>
+                                            </div>
+                                            @endif
                                             <p class="fs-3 fw-bold">{{ $product->price }}$</p>
                                         </div>
                                         <div class="d-flex justify-content-between mb-3">

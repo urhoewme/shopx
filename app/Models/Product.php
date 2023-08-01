@@ -37,4 +37,6 @@ class Product extends Model
     {
         return $this->belongsToMany(Tag::class, 'products_tags');
     }
+
+    protected $with = ['tags'];
 }
