@@ -21,6 +21,7 @@
                 <a class="nav-link" href="/products">Products</a>
                 <a class="nav-link" href="/dashboard">Dashboard</a>
                 <a href="/services" class="nav-link">Services</a>
+                <a href="/tags" class="nav-link">Tags</a>
                 <div class="navbar-nav">
                     <a class="nav-link" href="/logout">Log Out</a>
                 </div>

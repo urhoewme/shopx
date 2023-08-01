@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf_token" content="{{ csrf_token() }}">
-    <title>Shopix</title>
+    <title>Shopx</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
 </head>
@@ -45,7 +45,7 @@
                                     </div>
 
                                     <p class="text-center text-muted mt-5 mb-0">Do not have an account ? <a href="/register"
-                                                                                                            class="fw-bold text-body"><u>Sign Up
+                                                                                                            class="fw-bold text-body"><u>SignUp
                                                 here</u></a></p>
 
                                 </form>

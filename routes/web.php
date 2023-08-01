@@ -10,6 +10,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Middleware\Authenticate;
 use App\Http\Middleware\AdminAuth;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\TagController;
 
 /*
 |-------------------------------------------------------------------
@@ -54,9 +55,14 @@ Route::get('/cart', [CartController::class, 'index'])->middleware(Authenticate::
 Route::post('/cart/delete', [CartController::class, 'clearCart'])->middleware(Authenticate::class)->name('cart.delete');
 Route::post('/cart/product/delete/{id}', [CartController::class, 'deleteCartItem'])->middleware(Authenticate::class)->name('cartItem.delete');
 Route::post('/cart/product/{cart_item_id}/service/delete/{service_id}', [CartController::class, 'deleteService'])->middleware(Authenticate::class)->name('service.delete');
-Route::post('/cart/product/{id}/quantity/increase', [CartController::class, 'increaseQuantity'])->middleware(Authenticate::class);
-Route::post('/cart/product/{id}/quantity/decrease', [CartController::class, 'decreaseQuantity'])->middleware(Authenticate::class);
 
 Route::post('/checkout', [CheckoutController::class, 'checkout'])->middleware(Authenticate::class)->name('cart.checkout');
 Route::get('/checkout/success', [CheckoutController::class, 'success'])->middleware(Authenticate::class)->name('checkout.success');
 Route::get('/checkout/failure', [CheckoutController::class, 'failure'])->middleware(Authenticate::class)->name('checkout.failure');
+
+Route::get('/tags', [TagController::class, 'index'])->middleware(AdminAuth::class);
+Route::get('/tag/create', [TagController::class, 'create'])->middleware(AdminAuth::class);
+Route::post('/tag/create', [TagController::class, 'store'])->middleware(AdminAuth::class);
+Route::get('/tag/edit/{id}', [TagController::class, 'edit'])->middleware(AdminAuth::class);
+Route::post('/tag/edit/{id}', [TagController::class, 'update'])->middleware(AdminAuth::class);
+Route::post('/tag/delete/{id}', [TagController::class, 'destroy'])->middleware(AdminAuth::class);
