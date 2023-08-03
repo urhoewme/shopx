@@ -18,17 +18,27 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         $query = \request('search');
+        $tags = \request('tags');
         if ($request->sorting == 'title') {
-            $data = Product::orderBy('title', 'ASC')->paginate(9);
+            $data = Product::orderBy('title', 'ASC');
         } else if ($request->sorting == "title-desc") {
-            $data = Product::orderBy('title', 'DESC')->paginate(9);
+            $data = Product::orderBy('title', 'DESC');
         } else if ($request->sorting == "price") {
-            $data = Product::orderBy('price', 'ASC')->paginate(9);
+            $data = Product::orderBy('price', 'ASC');
         } else if ($request->sorting == "price-desc") {
-            $data = Product::orderBy('price', 'DESC')->paginate(9);
+            $data = Product::orderBy('price', 'DESC');
         } else {
-            $data = Product::where('title', 'like', '%' . $query . '%')->paginate(9);
+            $data = Product::where('title', 'like', '%' . $query . '%');
         }
+
+        if (!empty($tags)) {
+            $data = $data->whereHas('tags', function ($query) use ($tags) {
+                $query->whereIn('name', $tags);
+            });
+        }
+
+        $data = $data->paginate(9);
+
         return view('products.products', ['data' => $data, 'sorting' => $request->sorting, 'query' => $query]);
     }
 

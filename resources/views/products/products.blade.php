@@ -70,18 +70,7 @@
             </nav>
         @else
             <h1 class="fw-bold">Products</h1>
-            <form class="mb-2">
-                @csrf
-                <select name="sorting" class="form-select mb-2" aria-label="Default select example">
-                    <option value="default" selected>Default sorting</option>
-                    <option value="title">Title: from A-Z</option>
-                    <option value="title-desc">Title: from Z-A</option>
-                    <option value="price">Price: from low to high</option>
-                    <option value="price-desc">Price: from high to low</option>
-                </select>
-                <button class="form-control btn btn-primary">Apply</button>
-            </form>
-            <form class="d-flex mb-2" role="search">
+            <form class="d-flex mb-4" role="search">
                 @csrf
                 <input
                     type="search"
@@ -91,6 +80,27 @@
                 >
                 <button class="btn btn-outline-success" type="submit">Search</button>
             </form>
+            <form class="mb-4">
+                @csrf
+                <label class="mb-2">Sort by:</label>
+                <select name="sorting" class="form-select mb-2" aria-label="Default select example">
+                    <option value="default" selected>Default sorting</option>
+                    <option value="title">Title: from A-Z</option>
+                    <option value="title-desc">Title: from Z-A</option>
+                    <option value="price">Price: from low to high</option>
+                    <option value="price-desc">Price: from high to low</option>
+                </select>
+                <button class="form-control btn btn-primary">Apply</button>
+            </form>
+            <form class="mb-4" action="">
+                @csrf
+                <select name="tags[]" class="form-select mb-2" multiple aria-label="multiple select example">
+                    @foreach(\App\Models\Tag::all() as $tag)
+                        <option value="{{ $tag->name }}">{{ $tag->name }}</option>
+                    @endforeach
+                </select>
+                <button class="form-control btn btn-primary">Apply</button>
+            </form>
             <section style="background-color: #eee;">
                 <div class="container py-5">
                     <div class="row">
@@ -99,17 +109,18 @@
                                 <div class="card mb-4">
                                     <div class="card-body">
                                         <div class="d-flex justify-content-between">
-                                            @if($product->tags)
-                                            <div class="dropdown">
-                                                <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                                    Tags
-                                                </button>
-                                                <ul class="dropdown-menu">
-                                                    @foreach($product->tags as $tag)
-                                                        <li>{{ $tag->name }}</li>
-                                                    @endforeach
-                                                </ul>
-                                            </div>
+                                            @if($product->tags->count() > 0)
+                                                <div class="dropdown">
+                                                    <button class="btn btn-secondary dropdown-toggle" type="button"
+                                                            data-bs-toggle="dropdown" aria-expanded="false">
+                                                        Tags
+                                                    </button>
+                                                    <ul class="dropdown-menu">
+                                                        @foreach($product->tags as $tag)
+                                                            <li>{{ $tag->name }}</li>
+                                                        @endforeach
+                                                    </ul>
+                                                </div>
                                             @endif
                                             <p class="fs-3 fw-bold">{{ $product->price }}$</p>
                                         </div>
@@ -164,7 +175,19 @@
                             <div class="card mb-4">
                                 <div class="card-body">
                                     <div class="d-flex justify-content-between">
-                                        <p class="small"><a href="#!" class="text-muted">Laptops</a></p>
+                                        @if($product->tags->count() > 0)
+                                            <div class="dropdown">
+                                                <button class="btn btn-secondary dropdown-toggle" type="button"
+                                                        data-bs-toggle="dropdown" aria-expanded="false">
+                                                    Tags
+                                                </button>
+                                                <ul class="dropdown-menu">
+                                                    @foreach($product->tags as $tag)
+                                                        <li>{{ $tag->name }}</li>
+                                                    @endforeach
+                                                </ul>
+                                            </div>
+                                        @endif
                                         <p class="fs-3 fw-bold">{{ $product->price }}$</p>
                                     </div>
                                     <div class="d-flex justify-content-between mb-3">
