@@ -8,6 +8,7 @@ use App\Models\Service;
 use App\Models\Tag;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
@@ -134,5 +135,13 @@ class ProductController extends Controller
     {
         Product::where('id', $id)->delete();
         return redirect('/products')->with('status', 'Success');
+    }
+
+    public function export()
+    {
+        $disk = Storage::disk('s3');
+        $filename = 'catalog.csv';
+        $data = Product::all()->sum('price');
+        $disk->put($filename, $data);
     }
 }

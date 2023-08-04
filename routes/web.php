@@ -35,6 +35,7 @@ Route::get('/product/{id}', [ProductController::class, 'show']);
 Route::get('/product/edit/{id}', [ProductController::class, 'edit'])->middleware(AdminAuth::class);
 Route::post('/product/edit/{id}', [ProductController::class, 'update'])->middleware(AdminAuth::class);
 Route::post('/product/delete/{id}', [ProductController::class, 'destroy'])->middleware(AdminAuth::class);
+Route::post('/export', [ProductController::class, 'export'])->middleware(AdminAuth::class);
 
 Route::get('/register', [RegisterController::class, 'index']);
 Route::post('/register', [RegisterController::class, 'store']);

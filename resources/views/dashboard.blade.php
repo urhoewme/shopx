@@ -16,6 +16,10 @@
     @endauth
     @if(Auth::user()->usertype == \App\Models\User::ROLE_ADMIN)
         <div class="table-responsive">
+            <form action="/export" method="post">
+                @csrf
+                <button type="submit" class="btn btn-primary mb-2">Export product prices</button>
+            </form>
         <table class="table align-middle mb-0 bg-white">
             <thead class="bg-light">
             <tr>

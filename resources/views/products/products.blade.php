@@ -146,8 +146,19 @@
         @endif
     @else
         <h1 class="fw-bold">Products</h1>
-        <form class="mb-2">
+        <form class="d-flex mb-4" role="search">
             @csrf
+            <input
+                type="search"
+                class="form-control me-2"
+                name="search"
+                value="{{ $query }}"
+            >
+            <button class="btn btn-outline-success" type="submit">Search</button>
+        </form>
+        <form class="mb-4">
+            @csrf
+            <label class="mb-2">Sort by:</label>
             <select name="sorting" class="form-select mb-2" aria-label="Default select example">
                 <option value="default" selected>Default sorting</option>
                 <option value="title">Title: from A-Z</option>
@@ -157,15 +168,14 @@
             </select>
             <button class="form-control btn btn-primary">Apply</button>
         </form>
-        <form class="d-flex mb-2" role="search">
+        <form class="mb-4" action="">
             @csrf
-            <input
-                type="search"
-                class="form-control me-2"
-                name="search"
-                value="{{ $query }}"
-            >
-            <button class="btn btn-outline-success" type="submit">Search</button>
+            <select name="tags[]" class="form-select mb-2" multiple aria-label="multiple select example">
+                @foreach(\App\Models\Tag::all() as $tag)
+                    <option value="{{ $tag->name }}">{{ $tag->name }}</option>
+                @endforeach
+            </select>
+            <button class="form-control btn btn-primary">Apply</button>
         </form>
         <section style="background-color: #eee;">
             <div class="container py-5">

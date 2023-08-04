@@ -46,7 +46,7 @@
                                         <p class="lead fw-normal mb-2">{{ $cartItem['product']['title'] }}</p>
                                     </div>
                                     <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
-                                            <p class="lead fw-normal">{{ $cartItem['quantity'] }}</p>
+                                        <p class="lead fw-normal">{{ $cartItem['quantity'] }}</p>
                                     </div>
                                     <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
                                         <label>Product price</label>
@@ -100,11 +100,15 @@
                         <div class="card-body">
                             <label>Total price:</label>
                             <p>{{ $totalPrice + $servicePrice }}$</p>
-                            <form action="{{ route('cart.checkout') }}" method="POST">
-                                @csrf
-                                <button type="submit" class="btn btn-warning btn-block btn-lg">Proceed to Checkout
-                                </button>
-                            </form>
+                            @if(($totalPrice + $servicePrice) <= 0 )
+                                <button disabled class="btn btn-warning btn-block btn-lg">Proceed to Checkout</button>
+                            @else
+                                <form action="{{ route('cart.checkout') }}" method="POST">
+                                    @csrf
+                                    <button type="submit" class="btn btn-warning btn-block btn-lg">Proceed to Checkout
+                                    </button>
+                                </form>
+                            @endif
                         </div>
                     </div>
 
