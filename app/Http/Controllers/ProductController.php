@@ -8,6 +8,7 @@ use App\Models\Service;
 use App\Models\Tag;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
@@ -18,6 +19,10 @@ class ProductController extends Controller
 
     public function index(Request $request)
     {
+        $rates = DB::table('exchange_rates')
+            ->select('rate')
+            ->whereIn('name', ['GBP', 'EUR'])
+            ->get();
         $query = \request('search');
         $tags = \request('tags');
         if ($request->sorting == 'title') {
@@ -40,7 +45,7 @@ class ProductController extends Controller
 
         $data = $data->paginate(9);
 
-        return view('products.products', ['data' => $data, 'sorting' => $request->sorting, 'query' => $query]);
+        return view('products.products', ['data' => $data, 'sorting' => $request->sorting, 'query' => $query, 'rates' => $rates]);
     }
 
     /**
