@@ -17,7 +17,9 @@ jobs:
         run: composer install
 
       - name: Copy .env
-        run: cp .env.example .env
+        run: |
+          cp .env.example .env
+          ./vendor/bin/sail artisan key:generate
 
       - name: Stop and Remove Sail Containers
         run: ./vendor/bin/sail down -v
