@@ -21,7 +21,7 @@ jobs:
       - name: start sail
         run: ./vendor/bin/sail up -d
       - name: Copy .env
-        run: ./vendor/bin/sail -r "file_exists('.env') || copy('.env.example', '.env');"
+        run: cp .env.example .env
       - name: Generate key
         run: ./vendor/bin/sail artisan key:generate
       - name: Directory Permissions
