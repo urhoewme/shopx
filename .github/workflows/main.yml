@@ -1,39 +1,35 @@
-name: Deploy
+name: Build Workflow
 
 on:
   push:
-    branches: [Task_4.5]
+    branches:
+      - Task_4.5
+
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.1'
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 16
-      - name: Copy .env
-        run: cp .env.example .env
-      - name: Install composer dependencies
-        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-      - name: Install node dependencies
-        run: npm install
-      - name: Setup project
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: composer install
+
+      - name: Run docker-compose
         run: |
           ./vendor/bin/sail up -d
+
       - name: Update DB_HOST in .env
         run: |
-            container_name="shopx-mysql-1"
-            container_ip=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $container_name)
-            sed -i "s/^DB_HOST=.*/DB_HOST=$container_ip/" .env
-      - name: Directory permissions
-        run: chmod 755 -R storage bootstrap/cache
-      - name: Run Unit tests
+          container_name="shopx-mysql-1"
+          container_ip=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $container_name)
+          sed -i "s/^DB_HOST=.*/DB_HOST=$container_ip/" .env
+
+      - name: Run PHPUnit tests
         run: |
-            ./vendor/bin/sail artisan migrate --force
-            ./vendor/bin/sail artisan test
+          ./vendor/bin/sail artisan test
+
       - name: Deploy to server
         if: ${{ success() }}
         uses: appleboy/ssh-action@master
@@ -45,7 +41,7 @@ jobs:
           script: |
             cd shopx
             git pull
-            npm install
+            npm ci
             npm run build
             composer i
-            ./vendor/bin/sail artisan migrate --force
+            php artisan migrate --force
