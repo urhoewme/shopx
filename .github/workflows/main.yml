@@ -19,13 +19,14 @@ jobs:
       - name: Copy .env
         run: |
           cp .env.example .env
-          ./vendor/bin/sail artisan key:generate
 
       - name: Stop and Remove Sail Containers
         run: ./vendor/bin/sail down -v
 
       - name: Start Laravel Sail
-        run: ./vendor/bin/sail up -d
+        run: |
+          ./vendor/bin/sail up -d
+          ./vendor/bin/sail artisan key:generate
 
       - name: Update DB_HOST in .env
         run: |
