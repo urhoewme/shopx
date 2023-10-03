@@ -28,9 +28,9 @@ jobs:
           ./vendor/bin/sail artisan key:generate
           npm run build
       - name: Update DB_HOST in .env
-        working-directory: ./product-catalog
+        working-directory: ./shopx
         run: |
-            container_name="db"
+            container_name="mysql-1"
             container_ip=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $container_name)
             sed -i "s/^DB_HOST=.*/DB_HOST=$container_ip/" .env
       - name: Directory permissions
