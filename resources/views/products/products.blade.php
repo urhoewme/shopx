@@ -123,7 +123,7 @@
                                                 </div>
                                             @endif
                                             <p class="fs-3 fw-bold">{{ $product->price }}$</p>
-                                            <p class="fs-3 fw-bold">{{ $product->price * $rates[0]->rate }}£</p>
+                                            <p class="fs-3 fw-bold">{{ $product->price * $rates[1]->rate }}£</p>
                                         </div>
                                         <div class="d-flex justify-content-between mb-3">
                                             <h5 class="mb-0">{{ $product->title }}</h5>
