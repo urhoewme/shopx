@@ -33,4 +33,4 @@ jobs:
           DB_DATABASE: shopx
           DB_USERNAME: sail
           DB_PASSWORD: password
-        run: ./vendor/bin/sail artisan test
+        run: php artisan test
