@@ -24,7 +24,7 @@ jobs:
       - name: Install composer dependencies
         run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
       - name: Install node dependencies
-        run: npm ci
+        run: npm install
       - name: Setup project
         run: |
           php artisan config:clear
@@ -52,7 +52,7 @@ jobs:
           script: |
             cd shopx
             git pull
-            npm ci
+            npm install
             npm run build
             composer i
             php artisan migrate --force
