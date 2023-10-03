@@ -14,11 +14,6 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 16
-      - uses: mirromutth/mysql-action@v1.1
-        with:
-          mysql database: laravel_test_db
-          mysql user: laravel_test_user
-          mysql password: example
       - name: Copy .env
         run: cp .env.example .env
       - name: Install composer dependencies
