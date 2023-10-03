@@ -36,8 +36,8 @@ jobs:
         run: chmod 755 -R storage bootstrap/cache
       - name: Run Unit tests
         run: |
-            ./vendor/bin/sail artisan test
             ./vendor/bin/sail artisan migrate --force
+            ./vendor/bin/sail artisan test
       - name: Deploy to server
         if: ${{ success() }}
         uses: appleboy/ssh-action@master
