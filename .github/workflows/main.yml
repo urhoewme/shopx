@@ -34,7 +34,7 @@ jobs:
       - name: Execute tests (Unit and Feature tests) via PHPUnit
         env:
           DB_CONNECTION: mysql
-          DB_DATABASE: shopx
-          DB_USERNAME: sail
-          DB_PASSWORD: password
+          DB_DATABASE: test
+          DB_USERNAME: test
+          DB_PASSWORD: test
         run: ./vendor/bin/sail artisan test
