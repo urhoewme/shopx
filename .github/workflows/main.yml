@@ -27,9 +27,9 @@ jobs:
         run: npm install
       - name: Setup project
         run: |
-          php artisan config:clear
-          php artisan cache:clear
-          php artisan key:generate
+          ./vendor/bin/sail artisan config:clear
+          ./vendor/bin/sail artisan cache:clear
+          ./vendor/bin/sail artisan key:generate
           npm run build
       - name: Directory permissions
         run: chmod 755 -R storage bootstrap/cache
@@ -40,7 +40,7 @@ jobs:
           DB_USERNAME: laravel_test_user
           DB_PASSWORD: super_secret
           DB_DATABASE: laravel_test_db
-        run: php artisan test
+        run: ./vendor/bin/sail artisan test
       - name: Deploy to server
         if: ${{ success() }}
         uses: appleboy/ssh-action@master
@@ -55,4 +55,4 @@ jobs:
             npm install
             npm run build
             composer i
-            php artisan migrate --force
+            ./vendor/bin/sail artisan migrate --force
