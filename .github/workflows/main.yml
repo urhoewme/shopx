@@ -31,8 +31,9 @@ jobs:
         run: chmod 755 -R storage bootstrap/cache
       - name: Run Unit tests
         env:
-          APP_ENV: testing
+          APP_ENV: local
           DB_CONNECTION: mysql
+          DB_HOST: mysql
           DB_DATABASE: shopx
           DB_USERNAME: sail
           DB_PASSWORD: password
