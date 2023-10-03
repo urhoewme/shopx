@@ -28,12 +28,6 @@ jobs:
           ./vendor/bin/sail up -d
           ./vendor/bin/sail artisan key:generate
 
-      - name: Update DB_HOST in .env
-        run: |
-          container_name="shopx-mysql-1"
-          container_ip=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $container_name)
-          sed -i "s/^DB_HOST=.*/DB_HOST=$container_ip/" .env
-
       - name: Run PHPUnit tests
         run: |
           ./vendor/bin/sail artisan test
