@@ -23,7 +23,7 @@ jobs:
         run: ./vendor/bin/sail up -d
 
       - name: Update DB_HOST in .env
-        working-directory: ./product-catalog
+        working-directory: ./shopx
         run: |
           container_name="shopx-mysql-1"
           container_ip=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $container_name)
