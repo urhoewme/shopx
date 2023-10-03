@@ -16,9 +16,11 @@ jobs:
       - name: Install dependencies
         run: composer install
 
-      - name: Run docker-compose
-        run: |
-          ./vendor/bin/sail up -d --no-interaction
+      - name: Stop and Remove Sail Containers
+        run: ./vendor/bin/sail down -v
+
+      - name: Start Laravel Sail
+        run: ./vendor/bin/sail up -d
 
       - name: Update DB_HOST in .env
         run: |
