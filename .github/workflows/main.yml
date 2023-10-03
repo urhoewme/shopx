@@ -16,6 +16,9 @@ jobs:
       - name: Install dependencies
         run: composer install
 
+      - name: Copy .env
+        run: cp .env.example .env
+
       - name: Stop and Remove Sail Containers
         run: ./vendor/bin/sail down -v
 
