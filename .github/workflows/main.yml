@@ -24,6 +24,12 @@ jobs:
         run: cp .env.example .env
       - name: Generate key
         run: ./vendor/bin/sail artisan key:generate
+      - name: Update DB_HOST in .env
+        working-directory: ./product-catalog
+        run: |
+          container_name="shopx-mysql-1"
+          container_ip=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $container_name)
+          sed -i "s/^DB_HOST=.*/DB_HOST=$container_ip/" .env
       - name: Directory Permissions
         run: chmod -R 777 storage bootstrap/cache
       - name: Execute tests (Unit and Feature tests) via PHPUnit
