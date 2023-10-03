@@ -2,54 +2,64 @@ name: Deploy
 
 on:
   push:
-    branches: [Task_4.5]
+    branches:
+      - Task_4.5
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: shivammathur/setup-php@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
         with:
           php-version: '8.1'
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
         with:
           node-version: 16
+
       - name: Copy .env
         run: cp .env.example .env
-      - name: Install composer dependencies
-        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-      - name: Install node dependencies
-        run: npm install
-      - name: Setup project
+
+      - name: Start Laravel Sail
         run: |
           ./vendor/bin/sail up -d
-          ./vendor/bin/sail artisan config:clear
-          ./vendor/bin/sail artisan cache:clear
-          ./vendor/bin/sail artisan key:generate
-          npm run build
+          # Wait for MySQL container to start (adjust as needed)
+          sleep 10
+
       - name: Update DB_HOST in .env
         run: |
-            container_name="shopx-mysql-1"
-            container_ip=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $container_name)
-            sed -i "s/^DB_HOST=.*/DB_HOST=$container_ip/" .env
-      - name: Directory permissions
-        run: chmod 755 -R storage bootstrap/cache
+          container_ip=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' sailmysql)
+          sed -i "s/^DB_HOST=.*/DB_HOST=$container_ip/" .env
+
+      - name: Run Database Migrations
+        run: ./vendor/bin/sail artisan migrate --force
+
       - name: Run Unit tests
-        run: |
-            ./vendor/bin/sail artisan migrate --force
-            ./vendor/bin/sail artisan test
+        env:
+          APP_ENV: testing
+          DB_CONNECTION: mysql
+          DB_USERNAME: sail
+          DB_PASSWORD: password
+          DB_DATABASE: shopx
+        run: ./vendor/bin/sail artisan test
+
       - name: Deploy to server
-        if: ${{ success() }}
-        uses: appleboy/ssh-action@master
+        if: success()
+        uses: appleboy/ssh-action@v2
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_KEY }}
-          script_stop: true
           script: |
             cd shopx
             git pull
             npm install
             npm run build
-            composer i
+            composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
             ./vendor/bin/sail artisan migrate --force
