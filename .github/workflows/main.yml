@@ -17,7 +17,7 @@ jobs:
       - name: Copy .env
         run: cp .env.example .env
       - name: Install composer dependencies
-        run: composer install -q --no-ansi --no-iteration --no-scripts --no-progress --prefer-dist
+        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
       - name: Setup project
         run: |
           ./vendor/bin/sail up -d
