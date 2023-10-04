@@ -28,5 +28,5 @@ jobs:
         run: chmod -R 777 storage bootstrap/cache
       - name: Execute tests (Unit and Feature tests) via PHPUnit
         run: |
-          docker exec -it shopx-laravel.test-1 bash
+          docker exec shopx-laravel.test-1 bash
           php artisan test
