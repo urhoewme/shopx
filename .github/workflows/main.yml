@@ -1,40 +1,52 @@
-name: Laravel Sail CI
+name: Deploy
 
 on:
   push:
-    branches:
-      - Task_4.5
-
+    branches: [Task_4.5]
 jobs:
-  laravel-sail:
+  deploy:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Set up PHP
-        uses: shivammathur/setup-php@v2
+      - uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.1
-
-      - name: Install dependencies
-        run: composer install
-
-      - name: Copy .env file
+          php-version: '8.1'
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - name: Copy .env
         run: cp .env.example .env
-
-      - name: Generate app key
-        run: php artisan key:generate
-
-      - name: Set up Laravel Sail
-        run: php artisan sail:install
-
-      - name: Start Sail
-        run: ./vendor/bin/sail up -d
-
-      - name: Run migrations and seeders
-        run: ./vendor/bin/sail artisan migrate --seed
-
-      - name: Run tests
+      - name: Install composer dependencies
+        run: composer install -q --no-ansi --no-iteration --no-scripts --no-progress --prefer-dist
+      - name: Setup project
+        run: |
+          ./vendor/bin/sail up -d
+          ./vendor/bin/sail artisan config:clear
+          ./vendor/bin/sail artisan cache:clear
+          ./vendor/bin/sail artisan key:generate
+          ./vendor/bin/sail artisan migrate --seed
+      - name: Directory permissions
+        run: chmod 755 -R storage bootstrap/cache
+      - name: Run Unit tests
+        env:
+          APP_ENV: testing
+          DB_CONNECTION: mysql
+          DB_USERNAME: sail
+          DB_PASSWORD: password
+          DB_DATABASE: shopx
         run: ./vendor/bin/sail artisan test
+      - name: Deploy to server
+        if: ${{ success() }}
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          script_stop: true
+          script: |
+            cd shopx
+            git pull
+            npm ci
+            npm run build
+            composer i
+            php artisan migrate --force
