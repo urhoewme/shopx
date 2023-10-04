@@ -25,6 +25,7 @@ jobs:
           ./vendor/bin/sail artisan cache:clear
           ./vendor/bin/sail artisan key:generate
       - name: Directory permissions
+        working-directory: ./shopx
         run: chmod 777 -R .
       - name: Run Unit tests
         run: ./vendor/bin/sail artisan test
