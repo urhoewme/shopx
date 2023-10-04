@@ -24,16 +24,9 @@ jobs:
           ./vendor/bin/sail artisan config:clear
           ./vendor/bin/sail artisan cache:clear
           ./vendor/bin/sail artisan key:generate
-          ./vendor/bin/sail artisan migrate --seed
       - name: Directory permissions
-        run: chmod 755 -R storage bootstrap/cache
+        run: chmod 777 -R .
       - name: Run Unit tests
-        env:
-          APP_ENV: testing
-          DB_CONNECTION: mysql
-          DB_USERNAME: sail
-          DB_PASSWORD: password
-          DB_DATABASE: shopx
         run: ./vendor/bin/sail artisan test
       - name: Deploy to server
         if: ${{ success() }}
