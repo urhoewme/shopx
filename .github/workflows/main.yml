@@ -5,10 +5,7 @@ on:
     branches:
       - Task_4.7
     types:
-      - opened
-      - synchronize
-      - reopened
-      - review_requested
+      - closed
 
 jobs:
   build:
