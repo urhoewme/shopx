@@ -1,58 +1,26 @@
-name: Deploy
+name: Merge to Main Workflow
 
 on:
-  push:
-    branches: [main]
+  workflow_run:
+    workflows: ["Laravel Sail CI"]
+    types:
+      - completed
+
 jobs:
-  deploy:
+  merge:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.1'
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 16
-      - uses: mirromutth/mysql-action@v1.1
-        with:
-          mysql database: laravel_test_db
-          mysql user: laravel_test_user
-          mysql password: example
-      - name: Copy .env
-        run: cp .env.example .env
-      - name: Install composer dependencies
-        run: composer install -q --no-ansi --no-iteration --no-scripts --no-progress --prefer-dist
-      - name: Install node dependencies
-        run: npm ci
-      - name: Setup project
+      - name: Check Workflow Status
+        id: check_workflow
+        run: echo "::set-output name=success::$(echo ${{ github.event.workflow_run.conclusion }} == 'success')"
+
+      - name: Merge to Main
+        if: steps.check_workflow.outputs.success == 'true'
         run: |
-          php artisan config:clear
-          php artisan cache:clear
-          php artisan key:generate
-          npm run build
-      - name: Directory permissions
-        run: chmod 755 -R storage bootstrap/cache
-      - name: Run Unit tests
+          echo "Merging to main..."
+          git checkout main
+          git merge dev --no-ff
+          git push origin main
         env:
-          APP_ENV: testing
-          DB_CONNECTION: mysql
-          DB_USERNAME: laravel_test_user
-          DB_PASSWORD: super_secret
-          DB_DATABASE: laravel_test_db
-        run: php artisan test
-      - name: Deploy to server
-        if: ${{ success() }}
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USERNAME }}
-          key: ${{ secrets.SSH_KEY }}
-          script_stop: true
-          script: |
-            cd shopx
-            git pull
-            npm ci
-            npm run build
-            composer i
-            php artisan migrate --force
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
