@@ -1,45 +1,41 @@
-name: Deploy1
+name: Laravel Sail CI
 
 on:
   push:
-    branches: [Task_4.5]
+    branches:
+      - Task_4.5
+
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: shivammathur/setup-php@v2
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
         with:
           php-version: '8.1'
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 16
-      - name: Copy .env
+
+      - name: Install Composer Dependencies
+        run: composer install --no-interaction
+
+      - name: Copy Environment File
         run: cp .env.example .env
-      - name: Install composer dependencies
-        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-      - name: Setup project
+
+      - name: Change permissions
+        run: chmod 777 -R storage bootstrap/cache
+
+      - name: Start Laravel Sail
         run: |
           ./vendor/bin/sail up -d
-          ./vendor/bin/sail artisan config:clear
-          ./vendor/bin/sail artisan cache:clear
-          ./vendor/bin/sail artisan key:generate
-      - name: Directory permissions
-        run: chmod 777 -R storage bootstrap/cache
-      - name: Run Unit tests
-        run: ./vendor/bin/sail artisan test
-      - name: Deploy to server
-        if: ${{ success() }}
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USERNAME }}
-          key: ${{ secrets.SSH_KEY }}
-          script_stop: true
-          script: |
-            cd shopx
-            git pull
-            npm ci
-            npm run build
-            composer i
-            php artisan migrate --force
+
+      - name: Wait for Sail to Start
+        run: sleep 30
+
+      - name: Generate Application Key
+        run: ./vendor/bin/sail artisan key:generate
+
+      - name: Run Laravel Tests
+        run: ./vendor/bin/sail test
