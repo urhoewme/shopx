@@ -1,9 +1,14 @@
 name: Laravel Sail CI
 
 on:
-  push:
+  pull_request:
     branches:
-      - Task_4.5
+      - Task_4.7
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - review_requested
 
 jobs:
   build:
