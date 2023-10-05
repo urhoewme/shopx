@@ -6,6 +6,9 @@ on:
       - Task_4.7
     types:
       - closed
+      - opened
+      - reopened
+      - assigned
 
 jobs:
   build:
