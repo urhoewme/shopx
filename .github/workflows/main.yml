@@ -1,11 +1,10 @@
 name: Laravel Sail CI
 
 on:
-  pull_request:
+  pull_request_review:
     branches:
       - Task_4.7
-    types:
-      - closed
+    types: [submitted,edited,dismissed]
 
 jobs:
   build:
