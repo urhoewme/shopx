@@ -1,10 +1,9 @@
 name: Merge to Main Workflow
 
 on:
-  workflow_run:
-    workflows: ["Laravel Sail CI"]
+  pull_request:
     types:
-      - completed
+      - closed
 
 jobs:
   my_job:
@@ -12,12 +11,6 @@ jobs:
     steps:
       - name: Check Conditions
         run: |
-          if [ "${{ github.event_name }}" == "pull_request" ]; then
-            if [ "${{ github.event.pull_request.state }}" == "closed" ]; then
             git checkout main
             git merge --no-ff dev -m "Merge dev into main"
             git push origin main
-          else
-            sleep 20
-            fi
-          fi
