@@ -7,9 +7,17 @@ on:
       - completed
 
 jobs:
-  merge:
+  my_job:
     runs-on: ubuntu-latest
-
     steps:
-      - name: test
-        run: echo "TEST"
+      - name: Check Conditions
+        run: |
+          if [ "${{ github.event_name }}" == "pull_request" ]; then
+          if [ "${{ github.event.pull_request.state }}" == "closed" ]; then
+          git checkout main
+          git merge --no-ff dev -m "Merge dev into main"
+          git push origin main
+          else
+          sleep 20
+          fi
+          fi
