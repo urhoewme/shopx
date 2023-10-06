@@ -12,7 +12,7 @@
 @section('content')
     <h1>Dashboard</h1>
     @auth
-        <h2>Welcome, {{ auth()->user()->name }} !!!</h2>
+        <h2>Welcome, {{ auth()->user()->name }} !</h2>
     @endauth
     @if(Auth::user()->usertype == \App\Models\User::ROLE_ADMIN)
         <div class="table-responsive">
