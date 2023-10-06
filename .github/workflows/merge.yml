@@ -5,6 +5,9 @@ on:
     workflows: ["Laravel Sail CI"]
     types:
       - completed
+  pull_request:
+    types:
+      - closed
 
 jobs:
   merge:
