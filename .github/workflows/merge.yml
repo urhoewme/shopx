@@ -9,6 +9,7 @@ jobs:
   my_job:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@master
       - name: Check Conditions
         run: |
             git merge --no-ff dev -m "Merge dev into main"
