@@ -12,6 +12,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Check Conditions
         run: |
+          git fetch origin
           git checkout main
           git pull origin main
           git merge dev --no-ff -m "Merge dev into main"
