@@ -12,6 +12,5 @@ jobs:
       - uses: actions/checkout@master
       - name: Check Conditions
         run: |
-            git checkout main
             git merge --no-ff dev -m "Merge dev into main"
             git push origin main
