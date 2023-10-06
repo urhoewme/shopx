@@ -2,19 +2,50 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Products;
+use App\Models\Product;
+use App\Models\ProductsTags;
+use App\Models\Service;
+use App\Models\Tag;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+
+    public function index(Request $request)
     {
-        $data = Products::all();
-        return view('products.products', compact('data'));
+        $rates = DB::table('exchange_rates')
+            ->select('rate')
+            ->whereIn('name', ['GBP', 'EUR'])
+            ->get();
+        $query = \request('search');
+        $tags = \request('tags');
+        if ($request->sorting == 'title') {
+            $data = Product::orderBy('title', 'ASC');
+        } else if ($request->sorting == "title-desc") {
+            $data = Product::orderBy('title', 'DESC');
+        } else if ($request->sorting == "price") {
+            $data = Product::orderBy('price', 'ASC');
+        } else if ($request->sorting == "price-desc") {
+            $data = Product::orderBy('price', 'DESC');
+        } else {
+            $data = Product::where('title', 'like', '%' . $query . '%');
+        }
+
+        if (!empty($tags)) {
+            $data = $data->whereHas('tags', function ($query) use ($tags) {
+                $query->whereIn('name', $tags);
+            });
+        }
+
+        $data = $data->paginate(9);
+
+        return view('products.products', ['data' => $data, 'sorting' => $request->sorting, 'query' => $query, 'rates' => $rates]);
     }
 
     /**
@@ -22,7 +53,8 @@ class ProductController extends Controller
      */
     public function create()
     {
-        return view('products.create');
+        $data = Tag::all();
+        return view('products.create', compact('data'));
     }
 
     /**
@@ -38,12 +70,23 @@ class ProductController extends Controller
         ]);
         $fileName = time() . '.' . $request->image->extension();
         $request->image->move(public_path('images'), $fileName);
-        $product = new Products();
+        $product = new Product();
         $product->title = $request->title;
         $product->description = $request->description;
         $product->price = $request->price;
         $product->image = $fileName;
         $product->save();
+        if ($request->has('tags')) {
+            foreach ($request->tags as $tag_id) {
+                $tag = Tag::find($tag_id);
+                if ($tag) {
+                    $productTag = new ProductsTags();
+                    $productTag->product_id = $product->id;
+                    $productTag->tag_id = $tag_id;
+                    $productTag->save();
+                }
+            }
+        }
         return redirect('/products')->with('status', 'Success');
     }
 
@@ -52,8 +95,9 @@ class ProductController extends Controller
      */
     public function show(string $id)
     {
-        $data = Products::query()->findOrFail($id);
-        return view('products.product', compact('data'));
+        $data = Product::query()->findOrFail($id);
+        $services = Service::all();
+        return view('products.product', compact('data', 'services'));
     }
 
     /**
@@ -61,7 +105,8 @@ class ProductController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $data = Product::query()->findOrFail($id);
+        return view('products.edit', compact('data'));
     }
 
     /**
@@ -69,7 +114,23 @@ class ProductController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $data = Product::query()->findOrFail($id);
+        if ($request->image != '') {
+            $path = public_path('images');
+            if ($data->image != '' && $data->image != null) {
+                $file_old = $path . '/' . $data->image;
+                unlink($file_old);
+            }
+            $file = $request->image;
+            $filename = time() . '.' . $request->image->extension();
+            $file->move($path, $filename);
+            $data->update(['image' => $filename]);
+        }
+        $data->title = $request->title;
+        $data->description = $request->description;
+        $data->price = $request->price;
+        $data->save();
+        return redirect('/products')->with('status', 'Success');
     }
 
     /**
@@ -77,6 +138,15 @@ class ProductController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        Product::where('id', $id)->delete();
+        return redirect('/products')->with('status', 'Success');
+    }
+
+    public function export()
+    {
+        $disk = Storage::disk('s3');
+        $filename = 'catalog.csv';
+        $data = Product::all()->sum('price');
+        $disk->put($filename, $data);
     }
 }
