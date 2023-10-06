@@ -1,0 +1,15 @@
+name: Merge to Main Workflow
+
+on:
+  workflow_run:
+    workflows: ["Laravel Sail CI"]
+    types:
+      - completed
+
+jobs:
+  merge:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: test
+        run: echo "TEST"
