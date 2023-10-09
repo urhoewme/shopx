@@ -24,4 +24,4 @@ jobs:
           git config user.name "urhoewme"
           git checkout main
           git merge --no-ff dev
-          git push origin main
+          git push https://${{ secrets.GH_PAT }}@github.com/urhoewme/shopx.git main
