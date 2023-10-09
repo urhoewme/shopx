@@ -20,6 +20,8 @@ jobs:
 
       - name: Merge to main
         run: |
+          git config user.email "gheniavip@gmail.com"
+          git config user.name "urhoewme"
           git checkout main
           git merge --no-ff dev
           git push origin main
