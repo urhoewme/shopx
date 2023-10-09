@@ -4,16 +4,22 @@ on:
   pull_request:
     types:
       - closed
+    branches:
+      - dev
 
 jobs:
-  my_job:
+  merge-to-main:
     runs-on: ubuntu-latest
+    if: github.event.pull_request.merged == true && github.event.pull_request.head.ref == 'Task_4.7'
     steps:
-      - uses: actions/checkout@v2
-      - name: Check Conditions
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          ref: 'dev'
+          fetch-depth: 0
+
+      - name: Merge to main
         run: |
-          git fetch origin
           git checkout main
-          git pull origin main
-          git merge dev --no-ff -m "Merge dev into main"
+          git merge --no-ff dev
           git push origin main
