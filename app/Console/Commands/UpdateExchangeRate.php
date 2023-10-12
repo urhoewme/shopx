@@ -30,7 +30,8 @@ class UpdateExchangeRate extends Command
         $result = [];
         $apiKey = env('EXCHANGE_API_KEY');
         $client = new Client();
-        $response = $client->get("https://v6.exchangerate-api.com/v6/". $apiKey . "/latest/USD");
+//        $response = $client->get("https://v6.exchangerate-api.com/v6/". $apiKey . "/latest/USD");
+        $response = $client->get('https://v6.exchangerate-api.com/v6/0e6ed0c5b3c411340446b4f4/latest/USD');
         $data = json_decode($response->getBody(), true);
         foreach ($data['conversion_rates'] as $name => $value) {
             $result[] = [

@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'default' => env('MAIL_MAILER', 'smtp'),
+    'default' => env('MAIL_MAILER', 'ses'),
 
     /*
     |--------------------------------------------------------------------------
@@ -48,6 +48,10 @@ return [
 
         'ses' => [
             'transport' => 'ses',
+            'region' => env('AWS_DEFAULT_REGION', 'us-east-1'), // Set the AWS region
+            'version' => 'latest',
+            'key' => env('AWS_ACCESS_KEY_ID'),
+            'secret' => env('AWS_SECRET_ACCESS_KEY'),
         ],
 
         'mailgun' => [

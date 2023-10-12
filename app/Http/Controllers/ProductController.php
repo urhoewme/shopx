@@ -2,14 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\TestJob;
 use App\Models\Product;
 use App\Models\ProductsTags;
 use App\Models\Service;
 use App\Models\Tag;
+use App\Providers\ProductExportService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use PHPUnit\Util\Test;
 
 class ProductController extends Controller
 {
@@ -142,11 +145,10 @@ class ProductController extends Controller
         return redirect('/products')->with('status', 'Success');
     }
 
-    public function export()
+    public function export(ProductExportService $exportService)
     {
-        $disk = Storage::disk('s3');
-        $filename = 'catalog.csv';
-        $data = Product::all()->sum('price');
-        $disk->put($filename, $data);
+        $filename = 'products.csv';
+        $exportService->export($filename);
+        return redirect('/dashboard');
     }
 }
